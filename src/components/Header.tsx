@@ -1,16 +1,12 @@
 import React from 'react';
-import { ShieldCheck, FileText, HelpCircle, Sparkles, Building2 } from 'lucide-react';
+import { ShieldCheck, FileText } from 'lucide-react';
 
 interface HeaderProps {
-  onOpenGuide: () => void;
   onOpenPrint: () => void;
-  onOpenVeterquimica: () => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
-  onOpenGuide,
   onOpenPrint,
-  onOpenVeterquimica,
 }) => {
   return (
     <header className="bg-white border-b border-gray-200 shadow-xs text-[#1a1a1a]">
@@ -29,15 +25,9 @@ export const Header: React.FC<HeaderProps> = ({
             </div>
 
             <div>
-              <div className="flex items-center gap-2.5 flex-wrap">
-                <h1 className="text-xl sm:text-2xl font-extrabold tracking-tight text-gray-900">
-                  Calculador FerAppease
-                </h1>
-                <span className="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-bold uppercase tracking-wider bg-emerald-50 text-emerald-800 border border-emerald-200">
-                  <Sparkles className="w-3 h-3 mr-1 text-emerald-600" />
-                  MBAS
-                </span>
-              </div>
+              <h1 className="text-xl sm:text-2xl font-extrabold tracking-tight text-gray-900">
+                Calculador FerAppease
+              </h1>
               <p className="text-xs text-gray-500 uppercase tracking-widest font-semibold mt-0.5">
                 Proyección de Margen, Retorno y Reducción de Merma de Transporte
               </p>
@@ -47,29 +37,9 @@ export const Header: React.FC<HeaderProps> = ({
           {/* Quick Action Navigation */}
           <div className="flex items-center gap-2 self-start md:self-auto flex-wrap no-print">
             <button
-              id="btn-open-guide"
-              onClick={onOpenGuide}
-              className="inline-flex items-center gap-1.5 px-3 py-2 text-xs font-bold rounded-lg bg-gray-50 hover:bg-gray-100 text-gray-700 border border-gray-200 transition shadow-xs"
-              title="Ver respaldo científico y modo de uso"
-            >
-              <HelpCircle className="w-4 h-4 text-emerald-600" />
-              <span>Modo de Acción</span>
-            </button>
-
-            <button
-              id="btn-open-veterquimica"
-              onClick={onOpenVeterquimica}
-              className="inline-flex items-center gap-1.5 px-3 py-2 text-xs font-bold rounded-lg bg-gray-50 hover:bg-gray-100 text-gray-700 border border-gray-200 transition shadow-xs"
-              title="Información Veterquímica Chile"
-            >
-              <Building2 className="w-4 h-4 text-blue-600" />
-              <span>Veterquímica</span>
-            </button>
-
-            <button
               id="btn-open-print"
               onClick={onOpenPrint}
-              className="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-bold rounded-lg bg-gray-900 hover:bg-gray-800 text-white transition shadow-sm"
+              className="inline-flex items-center gap-1.5 px-4 py-2.5 text-xs font-bold rounded-xl bg-gray-900 hover:bg-gray-800 text-white transition shadow-sm"
             >
               <FileText className="w-4 h-4 text-emerald-400" />
               <span>Generar Informe</span>

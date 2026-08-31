@@ -164,7 +164,7 @@ Generado con Calculadora de ROI de Merma en Terneros (FerAppease® / Veterquími
                   </h1>
                 </div>
                 <div className="text-xs text-gray-500 mt-0.5">
-                  Tecnología FerAppease® (MBAS) | Veterquímica Chile
+                  Tecnología FerAppease®
                 </div>
               </div>
               <div className="text-left sm:text-right text-xs text-gray-500 font-mono">

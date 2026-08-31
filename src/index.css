@@ -23,7 +23,7 @@
 
   .font-mono,
   .font-mono-numbers {
-    font-family: 'JetBrains Mono', monospace;
+    font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, sans-serif;
     font-feature-settings: "tnum";
     font-variant-numeric: tabular-nums;
   }

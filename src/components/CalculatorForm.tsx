@@ -17,30 +17,6 @@ export const CalculatorForm: React.FC<CalculatorFormProps> = ({
 }) => {
   const isCLP = inputs.currency === 'CLP';
 
-  // Quick price presets
-  const quickPrices = isCLP
-    ? [
-        { label: '$2.400', value: 2400 },
-        { label: '$2.750', value: 2750 },
-        { label: '$2.980', value: 2980 },
-        { label: '$3.350', value: 3350 },
-      ]
-    : inputs.weightUnit === 'kg'
-    ? [
-        { label: '$2.50', value: 2.5 },
-        { label: '$3.00', value: 3.0 },
-        { label: '$3.50', value: 3.5 },
-        { label: '$4.00', value: 4.0 },
-      ]
-    : [
-        { label: '$2.20', value: 2.2 },
-        { label: '$2.60', value: 2.6 },
-        { label: '$3.00', value: 3.0 },
-        { label: '$3.40', value: 3.4 },
-      ];
-
-  const quickHeadCounts = [30, 60, 100, 250, 500];
-
   const priceMin = isCLP ? 1500 : 1.5;
   const priceMax = isCLP ? 4500 : 5.0;
   const priceStep = isCLP ? 50 : 0.05;
@@ -55,14 +31,14 @@ export const CalculatorForm: React.FC<CalculatorFormProps> = ({
 
   return (
     <div className="space-y-4">
-      {/* 1. Escenarios de Referencia (Selector Minimalista) */}
+      {/* 1. Escenarios de Referencia */}
       <div className="bg-white p-4 sm:p-5 rounded-2xl border border-gray-200 shadow-xs space-y-2.5">
         <div className="flex items-center justify-between">
           <span className="text-[11px] font-black uppercase text-gray-400 tracking-tighter">
             Escenario de Referencia
           </span>
-          <span className="text-[10px] font-bold text-gray-500 font-mono">
-            {activePresetId ? 'Personalizado / Preset' : 'Manual'}
+          <span className="text-[11px] font-bold text-gray-500 font-mono">
+            {activePresetId ? 'Preset Aplicado' : 'Ajuste Manual'}
           </span>
         </div>
 
@@ -75,16 +51,16 @@ export const CalculatorForm: React.FC<CalculatorFormProps> = ({
                 type="button"
                 id={`preset-${preset.id}`}
                 onClick={() => onSelectPreset(preset)}
-                className={`text-center py-2 px-2.5 rounded-xl border transition-all ${
+                className={`text-center py-2.5 px-2 rounded-xl border transition-all flex flex-col justify-between ${
                   isSelected
-                    ? 'border-emerald-600 bg-emerald-50 text-emerald-900 font-bold ring-1 ring-emerald-600'
-                    : 'border-gray-200 bg-gray-50/50 hover:bg-gray-100 text-gray-700 font-medium'
+                    ? 'border-emerald-600 bg-emerald-50 text-emerald-950 font-bold ring-2 ring-emerald-600/50 shadow-xs'
+                    : 'border-gray-200 bg-gray-50/60 hover:bg-gray-100 text-gray-800 font-medium'
                 }`}
               >
-                <div className="text-xs truncate">
+                <div className="text-xs font-bold truncate">
                   {preset.name.split('(')[0].trim()}
                 </div>
-                <div className="text-[11px] font-mono text-emerald-700 font-bold mt-0.5">
+                <div className="text-xs font-mono font-bold text-emerald-700 mt-1">
                   {preset.shrinkPercent}% merma
                 </div>
               </button>
@@ -93,23 +69,23 @@ export const CalculatorForm: React.FC<CalculatorFormProps> = ({
         </div>
       </div>
 
-      {/* 2. Parámetros del Lote y Mercado */}
-      <div className="bg-white p-4 sm:p-5 rounded-2xl border border-gray-200 shadow-xs space-y-4">
+      {/* 2. Parámetros del Lote y Precio de Venta */}
+      <div className="bg-white p-4 sm:p-5 rounded-2xl border border-gray-200 shadow-xs space-y-5">
         <span className="text-[11px] font-black uppercase text-gray-400 tracking-tighter block">
           Datos del Lote y Precio de Venta
         </span>
 
-        <div className="space-y-4">
-          {/* Número de Terneros */}
-          <div className="space-y-1.5">
-            <div className="flex items-center justify-between">
-              <label htmlFor="input-head-count" className="text-xs font-bold text-gray-700">
-                Tamaño del Lote
+        <div className="space-y-5">
+          {/* Tamaño del Lote */}
+          <div className="space-y-2">
+            <div className="flex items-center justify-between gap-3">
+              <label htmlFor="slider-head-count" className="text-xs font-bold text-gray-800">
+                Tamaño del Lote (Cabezas)
               </label>
               <div className="flex items-center gap-2">
-                <span className="text-xs font-mono font-bold text-gray-900 bg-gray-100 px-2 py-0.5 rounded">
+                <div className="px-3.5 py-1.5 rounded-xl border-2 border-gray-900 bg-gray-900 text-white font-mono font-extrabold text-sm sm:text-base shadow-xs min-w-[110px] text-center">
                   {inputs.headCount} cabezas
-                </span>
+                </div>
                 <input
                   id="input-head-count"
                   type="number"
@@ -117,7 +93,7 @@ export const CalculatorForm: React.FC<CalculatorFormProps> = ({
                   max="5000"
                   value={inputs.headCount || ''}
                   onChange={(e) => onChange({ headCount: Number(e.target.value) || 0 })}
-                  className="w-20 py-1 px-2 bg-gray-50 border border-gray-200 rounded-lg text-right font-mono font-bold text-gray-900 text-xs focus:outline-hidden focus:border-emerald-500"
+                  className="w-16 py-1.5 px-2 bg-gray-50 border border-gray-300 rounded-lg text-right font-mono font-bold text-gray-900 text-xs focus:outline-hidden focus:border-emerald-500"
                 />
               </div>
             </div>
@@ -129,36 +105,20 @@ export const CalculatorForm: React.FC<CalculatorFormProps> = ({
               step="5"
               value={inputs.headCount}
               onChange={(e) => onChange({ headCount: Number(e.target.value) })}
-              className="w-full h-1.5 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-gray-900"
+              className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-gray-900"
             />
-            <div className="flex items-center gap-1 pt-0.5">
-              {quickHeadCounts.map((count) => (
-                <button
-                  key={count}
-                  type="button"
-                  onClick={() => onChange({ headCount: count })}
-                  className={`text-[11px] px-2 py-0.5 rounded font-mono font-bold transition ${
-                    inputs.headCount === count
-                      ? 'bg-gray-900 text-white'
-                      : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-                  }`}
-                >
-                  {count}
-                </button>
-              ))}
-            </div>
           </div>
 
           {/* Peso Inicial */}
-          <div className="space-y-1.5 pt-2 border-t border-gray-100">
-            <div className="flex items-center justify-between">
-              <label htmlFor="input-avg-weight" className="text-xs font-bold text-gray-700">
-                Peso Inicial ({inputs.weightUnit})
+          <div className="space-y-2 pt-3 border-t border-gray-100">
+            <div className="flex items-center justify-between gap-3">
+              <label htmlFor="slider-avg-weight" className="text-xs font-bold text-gray-800">
+                Peso Inicial Promedio
               </label>
               <div className="flex items-center gap-2">
-                <span className="text-xs font-mono font-bold text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
+                <div className="px-3.5 py-1.5 rounded-xl border-2 border-emerald-600 bg-emerald-50 text-emerald-950 font-mono font-extrabold text-sm sm:text-base shadow-xs min-w-[110px] text-center">
                   {inputs.avgWeight} {inputs.weightUnit}
-                </span>
+                </div>
                 <input
                   id="input-avg-weight"
                   type="number"
@@ -167,7 +127,7 @@ export const CalculatorForm: React.FC<CalculatorFormProps> = ({
                   step={weightStep}
                   value={inputs.avgWeight || ''}
                   onChange={(e) => onChange({ avgWeight: Number(e.target.value) || 0 })}
-                  className="w-20 py-1 px-2 bg-gray-50 border border-gray-200 rounded-lg text-right font-mono font-bold text-gray-900 text-xs focus:outline-hidden focus:border-emerald-500"
+                  className="w-16 py-1.5 px-2 bg-gray-50 border border-gray-300 rounded-lg text-right font-mono font-bold text-gray-900 text-xs focus:outline-hidden focus:border-emerald-500"
                 />
               </div>
             </div>
@@ -179,25 +139,20 @@ export const CalculatorForm: React.FC<CalculatorFormProps> = ({
               step={weightStep}
               value={inputs.avgWeight}
               onChange={(e) => onChange({ avgWeight: Number(e.target.value) })}
-              className="w-full h-1.5 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-gray-900"
+              className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-gray-900"
             />
-            <div className="flex justify-between text-[10px] text-gray-400 font-mono">
-              <span>{weightMin} {inputs.weightUnit}</span>
-              <span>220-250 (destete)</span>
-              <span>{weightMax} {inputs.weightUnit}</span>
-            </div>
           </div>
 
           {/* Precio de Venta */}
-          <div className="space-y-1.5 pt-2 border-t border-gray-100">
-            <div className="flex items-center justify-between">
-              <label htmlFor="input-sale-price" className="text-xs font-bold text-gray-700">
-                Precio de Venta ({inputs.currency}/{inputs.weightUnit})
+          <div className="space-y-2 pt-3 border-t border-gray-100">
+            <div className="flex items-center justify-between gap-3">
+              <label htmlFor="slider-sale-price" className="text-xs font-bold text-gray-800">
+                Precio de Venta en Pie ({inputs.currency}/{inputs.weightUnit})
               </label>
               <div className="flex items-center gap-2">
-                <span className="text-xs font-mono font-bold text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
+                <div className="px-3.5 py-1.5 rounded-xl border-2 border-blue-600 bg-blue-50 text-blue-950 font-mono font-extrabold text-sm sm:text-base shadow-xs min-w-[130px] text-center">
                   {formatPricePerUnit(inputs.salePricePerUnit, inputs.currency, inputs.weightUnit)}
-                </span>
+                </div>
                 <input
                   id="input-sale-price"
                   type="number"
@@ -206,7 +161,7 @@ export const CalculatorForm: React.FC<CalculatorFormProps> = ({
                   step={priceStep}
                   value={inputs.salePricePerUnit || ''}
                   onChange={(e) => onChange({ salePricePerUnit: Number(e.target.value) || 0 })}
-                  className="w-24 py-1 px-2 bg-gray-50 border border-gray-200 rounded-lg text-right font-mono font-bold text-gray-900 text-xs focus:outline-hidden focus:border-emerald-500"
+                  className="w-20 py-1.5 px-2 bg-gray-50 border border-gray-300 rounded-lg text-right font-mono font-bold text-gray-900 text-xs focus:outline-hidden focus:border-emerald-500"
                 />
               </div>
             </div>
@@ -218,45 +173,29 @@ export const CalculatorForm: React.FC<CalculatorFormProps> = ({
               step={priceStep}
               value={inputs.salePricePerUnit}
               onChange={(e) => onChange({ salePricePerUnit: Number(e.target.value) })}
-              className="w-full h-1.5 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-emerald-600"
+              className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-blue-600"
             />
-            <div className="flex items-center gap-1 pt-0.5">
-              {quickPrices.map((qp, idx) => (
-                <button
-                  key={idx}
-                  type="button"
-                  onClick={() => onChange({ salePricePerUnit: qp.value })}
-                  className={`text-[11px] px-2 py-0.5 rounded font-mono font-bold transition ${
-                    inputs.salePricePerUnit === qp.value
-                      ? 'bg-emerald-600 text-white'
-                      : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-                  }`}
-                >
-                  {qp.label}
-                </button>
-              ))}
-            </div>
           </div>
         </div>
       </div>
 
-      {/* 3. Factores de Merma y Eficacia */}
-      <div className="bg-white p-4 sm:p-5 rounded-2xl border border-gray-200 shadow-xs space-y-4">
+      {/* 3. Factores de Merma y Tratamiento */}
+      <div className="bg-white p-4 sm:p-5 rounded-2xl border border-gray-200 shadow-xs space-y-5">
         <span className="text-[11px] font-black uppercase text-gray-400 tracking-tighter block">
           Factores de Merma y Tratamiento
         </span>
 
-        <div className="space-y-4">
-          {/* % Merma Estimada sin Producto */}
-          <div className="space-y-1.5">
-            <div className="flex items-center justify-between">
-              <label htmlFor="slider-shrink-percent" className="text-xs font-bold text-gray-700">
-                Merma sin Producto
+        <div className="space-y-5">
+          {/* Merma Estimada sin Producto */}
+          <div className="space-y-2">
+            <div className="flex items-center justify-between gap-3">
+              <label htmlFor="slider-shrink-percent" className="text-xs font-bold text-gray-800">
+                Merma Estimada sin FerAppease
               </label>
               <div className="flex items-center gap-2">
-                <span className="text-xs font-mono font-bold text-red-600 bg-red-50 px-2 py-0.5 rounded border border-red-100">
+                <div className="px-3.5 py-1.5 rounded-xl border-2 border-red-500 bg-red-50 text-red-700 font-mono font-extrabold text-sm sm:text-base shadow-xs min-w-[90px] text-center">
                   {inputs.expectedShrinkPercent}%
-                </span>
+                </div>
                 <input
                   type="number"
                   min="1"
@@ -264,7 +203,7 @@ export const CalculatorForm: React.FC<CalculatorFormProps> = ({
                   step="0.1"
                   value={inputs.expectedShrinkPercent}
                   onChange={(e) => onChange({ expectedShrinkPercent: Number(e.target.value) || 0 })}
-                  className="w-16 py-1 px-1.5 bg-gray-50 border border-gray-200 rounded-lg text-center font-mono font-bold text-gray-900 text-xs focus:outline-hidden focus:border-red-400"
+                  className="w-16 py-1.5 px-2 bg-gray-50 border border-gray-300 rounded-lg text-right font-mono font-bold text-gray-900 text-xs focus:outline-hidden focus:border-red-500"
                 />
               </div>
             </div>
@@ -276,25 +215,20 @@ export const CalculatorForm: React.FC<CalculatorFormProps> = ({
               step="0.5"
               value={inputs.expectedShrinkPercent}
               onChange={(e) => onChange({ expectedShrinkPercent: Number(e.target.value) })}
-              className="w-full h-1.5 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-red-600"
+              className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-red-600"
             />
-            <div className="flex justify-between text-[10px] text-gray-400 font-mono">
-              <span>3% (corta)</span>
-              <span>7% (estándar)</span>
-              <span>10%+ (larga)</span>
-            </div>
           </div>
 
-          {/* % Reducción FerAppease */}
-          <div className="space-y-1.5 pt-2 border-t border-gray-100">
-            <div className="flex items-center justify-between">
-              <label htmlFor="slider-reduction-percent" className="text-xs font-bold text-gray-700">
-                Reducción con FerAppease
+          {/* Reducción con FerAppease */}
+          <div className="space-y-2 pt-3 border-t border-gray-100">
+            <div className="flex items-center justify-between gap-3">
+              <label htmlFor="slider-reduction-percent" className="text-xs font-bold text-gray-800">
+                Eficacia de Reducción FerAppease
               </label>
               <div className="flex items-center gap-2">
-                <span className="text-xs font-mono font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-100">
+                <div className="px-3.5 py-1.5 rounded-xl border-2 border-emerald-600 bg-emerald-50 text-emerald-900 font-mono font-extrabold text-sm sm:text-base shadow-xs min-w-[90px] text-center">
                   {inputs.shrinkReductionPercent}%
-                </span>
+                </div>
                 <input
                   type="number"
                   min="10"
@@ -302,7 +236,7 @@ export const CalculatorForm: React.FC<CalculatorFormProps> = ({
                   step="1"
                   value={inputs.shrinkReductionPercent}
                   onChange={(e) => onChange({ shrinkReductionPercent: Number(e.target.value) || 0 })}
-                  className="w-16 py-1 px-1.5 bg-gray-50 border border-gray-200 rounded-lg text-center font-mono font-bold text-emerald-700 text-xs focus:outline-hidden focus:border-emerald-500"
+                  className="w-16 py-1.5 px-2 bg-gray-50 border border-gray-300 rounded-lg text-right font-mono font-bold text-emerald-800 text-xs focus:outline-hidden focus:border-emerald-500"
                 />
               </div>
             </div>
@@ -314,25 +248,20 @@ export const CalculatorForm: React.FC<CalculatorFormProps> = ({
               step="5"
               value={inputs.shrinkReductionPercent}
               onChange={(e) => onChange({ shrinkReductionPercent: Number(e.target.value) })}
-              className="w-full h-1.5 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-emerald-600"
+              className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-emerald-600"
             />
-            <div className="flex justify-between text-[10px] text-gray-400 font-mono">
-              <span>50% (mínimo)</span>
-              <span>80% (ensayos científicos)</span>
-              <span>95% (máximo)</span>
-            </div>
           </div>
 
           {/* Costo por Dosis */}
-          <div className="space-y-1.5 pt-2 border-t border-gray-100">
-            <div className="flex items-center justify-between">
-              <label htmlFor="slider-cost-per-dose" className="text-xs font-bold text-gray-700">
-                Costo por Dosis
+          <div className="space-y-2 pt-3 border-t border-gray-100">
+            <div className="flex items-center justify-between gap-3">
+              <label htmlFor="slider-cost-per-dose" className="text-xs font-bold text-gray-800">
+                Inversión Dosis / Cabeza
               </label>
               <div className="flex items-center gap-2">
-                <span className="text-xs font-mono font-bold text-gray-700 bg-gray-100 px-2 py-0.5 rounded">
-                  {formatCurrency(inputs.costPerDose, inputs.currency)} / dosis
-                </span>
+                <div className="px-3.5 py-1.5 rounded-xl border-2 border-gray-800 bg-gray-50 text-gray-900 font-mono font-extrabold text-sm sm:text-base shadow-xs min-w-[120px] text-center">
+                  {formatCurrency(inputs.costPerDose, inputs.currency)}
+                </div>
                 <input
                   id="input-cost-per-dose"
                   type="number"
@@ -341,7 +270,7 @@ export const CalculatorForm: React.FC<CalculatorFormProps> = ({
                   step={costStep}
                   value={inputs.costPerDose || ''}
                   onChange={(e) => onChange({ costPerDose: Number(e.target.value) || 0 })}
-                  className="w-24 py-1 px-2 bg-gray-50 border border-gray-200 rounded-lg text-right font-mono font-bold text-gray-900 text-xs focus:outline-hidden focus:border-emerald-500"
+                  className="w-20 py-1.5 px-2 bg-gray-50 border border-gray-300 rounded-lg text-right font-mono font-bold text-gray-900 text-xs focus:outline-hidden focus:border-emerald-500"
                 />
               </div>
             </div>
@@ -353,16 +282,11 @@ export const CalculatorForm: React.FC<CalculatorFormProps> = ({
               step={costStep}
               value={inputs.costPerDose}
               onChange={(e) => onChange({ costPerDose: Number(e.target.value) })}
-              className="w-full h-1.5 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-gray-900"
+              className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-gray-900"
             />
-            <div className="flex justify-between items-center text-[10px] text-gray-400 font-mono">
-              <span>Total Lote: <strong className="text-gray-700">{formatCurrency(inputs.headCount * inputs.costPerDose, inputs.currency)}</strong></span>
-              <span>10 mL / ternero</span>
-            </div>
           </div>
         </div>
       </div>
     </div>
   );
 };
-
