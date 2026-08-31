@@ -1,0 +1,6 @@
+{
+  "name": "Calculador FerAppease",
+  "description": "Calculadora de retorno de inversión por reducción de merma de peso en terneros (FerAppease), adaptable a Pesos Chilenos ($ CLP/kg) y USD.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
